@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <property id="TopLabel" type="string"></property>
+    <property id="TopLabelBold" type="number">0</property>
+    <property id="TopLabelFont" type="number">0</property>
+    <property id="TimeColor" type="number">16115411</property>
+    <property id="DateColor" type="number">16115411</property>
+    <property id="SecondsColor" type="number">16737843</property>
+    <property id="AmPmColor" type="number">16737843</property>
+    <property id="FieldTextColor" type="number">16737843</property>
+    <property id="FieldValueColor" type="number">16115411</property>
+    <property id="SkyColor" type="number">10894898</property>
+    <property id="MountainFarColor" type="number">4876922</property>
+    <property id="MountainMidColor" type="number">2373447</property>
+    <property id="MountainNearColor" type="number">1385778</property>
+    <property id="TimeFont" type="number">1</property>
+    <property id="ShowAmPm" type="number">1</property>
+    <property id="ShowDate" type="number">1</property>
+    <property id="ShowWeekday" type="number">1</property>
+    <property id="ShowLunar" type="number">1</property>
+    <property id="ShowSolarTerm" type="number">1</property>
+    <property id="CalendarLayout" type="number">1</property>
+    <property id="ShowSecondsActive" type="number">0</property>
+    <property id="TemperatureUnit" type="number">0</property>
+    <property id="RingField" type="number">0</property>
+    <property id="TrendField" type="number">0</property>
+    <property id="TrendStyle" type="number">1</property>
+    <property id="FieldTopLeft" type="number">16</property>
+    <property id="FieldTopRight" type="number">17</property>
+    <property id="BottomFieldCount" type="number">3</property>
+    <property id="BottomFieldLayout" type="number">0</property>
+    <property id="FieldLeft" type="number">2</property>
+    <property id="FieldCenter" type="number">1</property>
+    <property id="FieldRight" type="number">3</property>
+    <!-- AMOLED AOD uses cached data only; these control its bottom fields. -->
+    <property id="AodLeftField" type="number">7</property>
+    <property id="AodCenterField" type="number">5</property>
+    <property id="AodRightField" type="number">5</property>
+    <property id="WeatherLeft" type="number">1</property>
+    <property id="WeatherRight" type="number">3</property>
+    <property id="WeatherFieldCount" type="number">2</property>
+    <property id="UpdateFrequency" type="number">60</property>
+    <property id="LowPowerStyle" type="number">1</property>
+</properties>

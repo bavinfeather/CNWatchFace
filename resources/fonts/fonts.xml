@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fonts>
+    <!-- ASCII ^ maps to the bundled degree glyph, avoiding locale-dependent
+         Unicode lookup in device FONT_XTINY. -->
+    <font id="Degree16" filename="degree_16.fnt" />
+    <font id="Degree20" filename="degree_20.fnt" />
+    <font id="Degree28" filename="degree_28.fnt" />
+    <font id="Degree34" filename="degree_34.fnt" />
+</fonts>

@@ -1,0 +1,6 @@
+info face="CNWatchFace Degree 28" size=28 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=0 aa=0 padding=0,0,0,0 spacing=0,0 outline=0
+common lineHeight=28 base=28 scaleW=16 scaleH=28 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+page id=0 file="degree_28_0.png"
+chars count=1
+char id=94 x=0 y=0 width=16 height=28 xoffset=0 yoffset=0 xadvance=12 page=0 chnl=15
+kernings count=0

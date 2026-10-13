@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<drawables>
+    <bitmap id="LauncherIcon" filename="launcher_icon.svg"/>
+    <bitmap id="BodyBatteryIcon" filename="body_battery_handsup.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiShoePrint" filename="mdi_shoe_print.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiStairs" filename="mdi_stairs.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiFire" filename="mdi_fire.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiBike" filename="mdi_bike.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiMapMarkerDistance" filename="mdi_map_marker_distance.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiBattery" filename="mdi_battery.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiHeart" filename="mdi_heart.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiBrain" filename="mdi_brain.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiSunrise" filename="mdi_sunrise.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiSunset" filename="mdi_sunset.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiThermometer" filename="mdi_thermometer.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiWaterPercent" filename="mdi_water_percent.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiTerrain" filename="mdi_terrain.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiGauge" filename="mdi_gauge.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiMolecule" filename="mdi_molecule.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiClock" filename="mdi_clock.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiCalendar" filename="mdi_calendar.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiHeartPulse" filename="mdi_heart_pulse.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiTarget" filename="mdi_target.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiSunny" filename="mdi_sunny.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiWeatherNight" filename="mdi_weather_night.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiWaves" filename="mdi_waves.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiBell" filename="mdi_bell.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiAlarm" filename="mdi_alarm.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiWeatherPartlyCloudy" filename="mdi_weather_partly_cloudy.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiMapMarker" filename="mdi_map_marker.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiWeatherWindy" filename="mdi_weather_windy.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiArrowExpandVertical" filename="mdi_arrow_expand_vertical.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+    <bitmap id="MdiWeatherRainy" filename="mdi_weather_rainy.svg" dithering="none" packingFormat="png" automaticPalette="false"/>
+</drawables>
