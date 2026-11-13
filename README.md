@@ -1,67 +1,39 @@
 # CNWatchFace
 
-一个从零开始、独立实现的 Garmin Connect IQ 中文数据表盘。
+Garmin Connect IQ 中文山景数据表盘。
 
-正式视觉基准保存在 `design/reference-watchface.png`。实际表盘不会把整张效果图作为静态背景，而是以实时绘图方式重建山峰、文字、趋势线、圆环和数据区域。
+[English](#english)
 
-当前版本支持 SDK 9.2.0 中全部 240×240、全部 260×260 圆形 MIP，以及 390/416/454 圆形 AMOLED 屏幕。完整清单见 [SUPPORTED_DEVICES.md](SUPPORTED_DEVICES.md)。
+## 功能
 
-跨机型字体和坐标由编译期 profile 管理，结构与调整门禁见 [LAYOUT_PROFILES.md](LAYOUT_PROFILES.md)。
+- 显示时间、日期、天气和可自定义数据字段
+- 趋势图支持折线和柱状图；部分 AMOLED 设备可将图表区改为数据字段
+- 可调整天空和山峰配色
+- 支持中文、英文设置及 AMOLED 常亮显示
+- 部分设备支持和风天气和中文位置查询，需使用自己的 API Host 和 Key
 
-主要功能：
-
-- 放大的系统时间
-- 删除参考图中日期下方的大型独立步数面板，为时间留出更大空间
-- 顶部字段及底部三个小型自定义字段
-- 仅主时间使用大号数字字体，其余信息统一小号；时间位置下移
-- 顶部左右、底部三个位置均为自定义字段（图标 + 数值）
-- 天气区左右两个可配置项：气温 / 风速 / 最高~最低 / 状况 / 降水概率 / 体感
-- 趋势图可选数据与样式（折线 / 直方图），绘制在山峰下方避免重叠
-- AMOLED 常亮模式使用黑底低亮度画面，按分钟轻微移动。手机设置可为左、中、右三个位置各选一种数据，也可使用简洁模式。
-- 天空与远/中/近三层山峰颜色可独立配置（多套配色）
-- 手机与手表端设置均已简体中文 / 英文本地化
-
-240×240 的 fēnix 7S / 7S Pro 使用现代 `Round240` 样式，支持顶部字段、农历、节气、天气和高级数据。其余较低 API 的 240×240 MIP 使用 API 2.4 兼容精简版；API 3.0 的 260×260 Approach S62 同样使用低内存路径。
+支持设备和不同机型的功能差异见 [设备清单](SUPPORTED_DEVICES.md)。和风天气配置和使用限制见 [配置说明](QWEATHER.md)。
 
 ## 构建
 
-### A 屏图表区切换
+安装 Garmin Connect IQ SDK 和 VS Code 的 Monkey C 扩展，打开本项目后运行 **Monkey C: Run Without Debugging**。发布包可通过 **Monkey C: Export Project** 生成。
 
-仅 AMOLED 机型提供“图表区自定义数据”开关，默认关闭，保留原趋势图。开启后，图表区改为上下两排独立的文字名称和数值：文字贴近中轴右对齐，数值紧随文字左对齐，并补齐步数、距离等数据的单位。分别由“图表区上排数据”和“图表区下排数据”设置，默认显示步数和距离。左侧数据及底部字段不变。手机设置和手表设置均可调整；MIP、传统布局及 AOD 不变。
+## 许可
 
-现代布局的手表菜单仅保留常用设置。颜色、字体、日期与布局细节、AOD 字段和刷新频率等可从手机端调整。
+本项目保留所有权利。第三方素材和许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
 
-### 和风天气与中文位置
+## English
 
-内存足够的现代布局新增“天气来源”设置，可选择 Garmin 天气（默认）或和风天气。和风提供气温、体感、风速、风向、湿度、中文天气状况、紫外线指数、最高最低温、当前预报时段的降水概率及日出日落。降水概率不使用降水量代替；预报过期后不显示旧的最高最低温和降水概率。两个来源的天气缓存独立，切换来源时不会混用。
+A mountain-themed Garmin Connect IQ watch face with Chinese and English settings.
 
-低于 128 KiB 表盘内存的型号完全排除和风代码、中文位置查询、后台服务及相关设置，继续使用 Garmin 天气。目前现代布局中包括 fēnix 6、fēnix 6 Pro 和 Enduro；旧版精简布局同样不增加和风。此限制在编译时执行，旧的和风设置或缓存不会重新开启该功能。这三个现代低内存型号仅通过手机端调整表盘设置，编译时排除完整手表菜单，避免长列表及菜单代码挤占表盘运行内存。其余型号保留手表端设置。
+- Time, date, weather, and configurable data fields
+- Line or bar charts; on supported AMOLED devices, the chart area can show data fields instead
+- Configurable sky and mountain colors
+- AMOLED always-on display
+- QWeather and Chinese location names on supported devices, using your own API host and key
 
-在和风开发者控制台创建项目和 API KEY 凭据，将账号的专属 API Host（例如 `abcxyz.re.qweatherapi.com`，不是控制台网址）和 API Key 填入手机端表盘设置，然后将“天气来源”设为“和风天气”。天气来源也可以在手表端菜单切换；Host、Key 在手机端填写。每位用户使用自己的凭据，表盘不内置共享密钥。选择和风但凭据未配置或尚未取得数据时显示 `--`，不会静默切回 Garmin。
+See [supported devices](SUPPORTED_DEVICES.md) and the [QWeather setup notes](QWEATHER.md) (Chinese) for device limitations.
 
-“GPS 位置”字段使用相同凭据独立查询中文城市名，即使天气来源仍选择 Garmin 也可使用。Host、Key 为空时，该字段继续读取 Garmin 提供的地点名称。
+To build, install the Garmin Connect IQ SDK and Monkey C extension for VS Code, open this project, and run **Monkey C: Run Without Debugging**. Use **Monkey C: Export Project** to create an IQ package.
 
-查询固定使用简体中文，优先显示城市名，城市名为空时显示区县名。坐标取最近的手表 GPS 或天气位置，均不可用时使用天气缓存中的坐标；天气坐标可能是观测站所在位置，并不等于手机实时位置。没有坐标时，可在户外运动界面等待 GPS 定位后返回表盘。
-
-“和风坐标区域”默认为中国大陆，查询前使用 `eviltransform` 的开源公式将 GPS 的 WGS-84 坐标转换为 GCJ-02。港澳台及海外选择“其他地区”，保持 WGS-84。缓存始终保存原始坐标，切换区域会使旧区域缓存失效；开源来源及许可见 `THIRD_PARTY_NOTICES.md`。
-
-首次查询按 Garmin 后台调度执行（距上次后台事件至少 5 分钟）。之后每 15 分钟检查坐标，变动超过 0.02 度或城市名缓存满 24 小时才查询地名。和风实时天气约每 30 分钟更新，每日预报约每 3 小时更新，位置变化或预报时段失效时提前更新。请求失败至少间隔 1 小时再尝试，保留上次成功的城市名和实时天气。联网需要手机连接、Garmin Connect 和可用网络。旧版精简布局不提供此功能。
-
-每次后台运行只请求一个接口，优先实时天气，再查城市名和每日预报；还有待查询项目时，下一次后台运行间隔至少 5 分钟，因此首次城市名和预报可能晚于气温出现。天气使用现行 `/weather/v1` 接口，城市名使用 `/geo/v2/city/lookup`，不混用旧版天气返回格式。
-
-实时天气、每日预报及城市查询各自退避，某个接口失败不会阻止其他接口刷新。临时无法取得 GPS 或 Garmin 天气位置时，继续使用同一 Host、同一坐标区域下最后成功保存的和风坐标。夜间降水概率按其自身时段判断有效期，跨午夜后可继续显示，但不会沿用过期的最高最低温。
-
-地点数据来源：[和风天气](https://www.qweather.com/)。接口、认证和免费额度以[官方文档](https://dev.qweather.com/docs/api/geoapi/city-lookup/)为准。
-
-1. 在 VS Code 中打开本目录。
-2. 运行 `Monkey C: Run Without Debugging`。
-3. 旧 MIP 可选择 `fenix5_sim`，完整 MIP 可选择 `fenix7pro_sim`；AMOLED 建议分别选择 `epix2pro42mm_sim`、`fenix843mm_sim` 和 `fenix847mm_sim`。
-
-发布到 Connect IQ Store 前，使用 `Monkey C: Export Project` 生成 `.iq` 文件。
-
-## 洁净实现原则
-
-- 不复制无明确许可证项目的源码、字体、图标、图片或设置文件。
-- 功能需求可以参考用户体验，但代码和视觉资产必须独立设计与实现。
-- 引入任何第三方内容前必须先确认许可证，并保存版权声明和来源。
-- 免费发布不等于开源；当前项目采用保留所有权利的许可证。
+All rights reserved. See [third-party notices](THIRD_PARTY_NOTICES.md) for included assets and licenses.
