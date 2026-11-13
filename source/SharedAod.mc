@@ -2,7 +2,7 @@ using Toybox.Graphics;
 using Toybox.Lang;
 
 // Portable AMOLED renderer. Call only in low power; pass formatted clock/date
-// and cached field strings. No application properties, resources or sensors.
+// and [value, label] text pairs. No application properties, resources or sensors.
 class SharedAod {
     private var _width = 0;
     private var _timeFont = Graphics.FONT_NUMBER_MEDIUM;
@@ -84,7 +84,7 @@ class SharedAod {
     }
 
     function draw(dc as Graphics.Dc, minute as Lang.Number, timeText as Lang.String,
-                  dateText as Lang.String, fields as Lang.Array) as Void {
+                  dateText as Lang.String, fields as Lang.Array<Lang.Array<Lang.String>>) as Void {
         prepare(dc);
         var height = dc.getHeight();
         var shiftX = (minute % 5) - 2;
@@ -100,6 +100,7 @@ class SharedAod {
         // Reserve fixed row areas so changing values cannot pulse the clock brightness.
         weightedArea += _width * 0.70 * smallHeight * 119.0;
         weightedArea += _width * 0.66 * smallHeight * 102.0;
+        if (fields.size() > 0) { weightedArea += _width * 0.66 * smallHeight * 102.0; }
         var lineWidth = (_width / 210).toNumber();
         if (lineWidth < 1) { lineWidth = 1; }
         weightedArea += (3 * _width + height) * (lineWidth + 2) * 112.0;
@@ -122,7 +123,7 @@ class SharedAod {
         // Compact non-empty fields; hidden fields leave no empty columns.
         var count = 0;
         for (var i = 0; i < fields.size(); i += 1) {
-            if (fields[i] != "") { count += 1; }
+            if (fields[i][0] != "") { count += 1; }
         }
         if (count == 0) { return; }
         var slot = (_width * 0.66 / count).toNumber();
@@ -130,9 +131,11 @@ class SharedAod {
         var index = 0;
         dc.setColor(fieldGray * 0x010101, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < fields.size(); i += 1) {
-            if (fields[i] == "") { continue; }
-            dc.drawText(left + index * slot, (height * 0.61).toNumber() + shiftY,
-                        Graphics.FONT_XTINY, fitText(dc, fields[i], slot - 6), justify);
+            if (fields[i][0] == "") { continue; }
+            dc.drawText(left + index * slot, (height * 0.60).toNumber() + shiftY,
+                        Graphics.FONT_XTINY, fitText(dc, fields[i][1], slot - 6), justify);
+            dc.drawText(left + index * slot, (height * 0.60).toNumber() + smallHeight + shiftY,
+                        Graphics.FONT_XTINY, fitText(dc, fields[i][0], slot - 6), justify);
             index += 1;
         }
     }

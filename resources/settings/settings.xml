@@ -495,33 +495,6 @@
             <listEntry value="22">@Strings.FieldLunar</listEntry>
         </settingConfig>
     </setting>
-    <setting propertyKey="@Properties.AodLeftField" title="@Strings.SettingAodLeftField">
-        <settingConfig type="list">
-            <listEntry value="0">@Strings.FieldHidden</listEntry>
-            <listEntry value="5">@Strings.FieldBattery</listEntry>
-            <listEntry value="7">@Strings.FieldHeartRate</listEntry>
-            <listEntry value="10">@Strings.FieldDate</listEntry>
-            <listEntry value="11">@Strings.FieldWeekday</listEntry>
-        </settingConfig>
-    </setting>
-    <setting propertyKey="@Properties.AodCenterField" title="@Strings.SettingAodCenterField">
-        <settingConfig type="list">
-            <listEntry value="0">@Strings.FieldHidden</listEntry>
-            <listEntry value="5">@Strings.FieldBattery</listEntry>
-            <listEntry value="7">@Strings.FieldHeartRate</listEntry>
-            <listEntry value="10">@Strings.FieldDate</listEntry>
-            <listEntry value="11">@Strings.FieldWeekday</listEntry>
-        </settingConfig>
-    </setting>
-    <setting propertyKey="@Properties.AodRightField" title="@Strings.SettingAodRightField">
-        <settingConfig type="list">
-            <listEntry value="0">@Strings.FieldHidden</listEntry>
-            <listEntry value="5">@Strings.FieldBattery</listEntry>
-            <listEntry value="7">@Strings.FieldHeartRate</listEntry>
-            <listEntry value="10">@Strings.FieldDate</listEntry>
-            <listEntry value="11">@Strings.FieldWeekday</listEntry>
-        </settingConfig>
-    </setting>
     <setting propertyKey="@Properties.WeatherFieldCount" title="@Strings.SettingWeatherFieldCount">
         <settingConfig type="list">
             <listEntry value="1">@Strings.FieldCountOne</listEntry>
@@ -556,12 +529,6 @@
             <listEntry value="30">@Strings.Every30Seconds</listEntry>
             <listEntry value="5">@Strings.Every5Seconds</listEntry>
             <listEntry value="1">@Strings.EverySecond</listEntry>
-        </settingConfig>
-    </setting>
-    <setting propertyKey="@Properties.LowPowerStyle" title="@Strings.SettingLowPowerStyle">
-        <settingConfig type="list">
-            <listEntry value="1">@Strings.LowPowerSimple</listEntry>
-            <listEntry value="0">@Strings.LowPowerFull</listEntry>
         </settingConfig>
     </setting>
 </settings>

@@ -1,0 +1,28 @@
+<strings>
+    <string id="SettingAodLeftField" scope="settings">常亮左侧字段</string>
+    <string id="SettingAodCenterField" scope="settings">常亮中间字段</string>
+    <string id="SettingAodRightField" scope="settings">常亮右侧字段</string>
+    <string id="SettingLowPowerStyle">AMOLED 常亮显示</string>
+    <string id="LowPowerSimple">简洁</string>
+    <string id="LowPowerFull">显示自定义字段</string>
+    <string id="AodTemperatureChoice" scope="settings">Garmin 天气气温</string>
+    <string id="AodHidden" scope="settings">隐藏</string>
+    <string id="AodBattery" scope="settings">电量</string>
+    <string id="AodBatteryDays" scope="settings">电量天数</string>
+    <string id="AodHeart" scope="settings">心率</string>
+    <string id="AodBodyBattery" scope="settings">身体电量</string>
+    <string id="AodStress" scope="settings">压力</string>
+    <string id="AodSteps" scope="settings">步数</string>
+    <string id="AodStepGoal" scope="settings">步数达标率</string>
+    <string id="AodDistance" scope="settings">今日距离</string>
+    <string id="AodFloors" scope="settings">爬楼层数</string>
+    <string id="AodCalories" scope="settings">总热量</string>
+    <string id="AodActiveMinutes" scope="settings">今日活动分钟</string>
+    <string id="AodWeeklyMinutes" scope="settings">本周活动分钟</string>
+    <string id="AodTemperature" scope="settings">气温</string>
+    <string id="AodNotifications" scope="settings">通知数</string>
+    <string id="AodAlarms" scope="settings">闹钟数</string>
+    <string id="AodDate" scope="settings">日期</string>
+    <string id="AodWeekday" scope="settings">星期</string>
+    <string id="AodLabels">zh|步数|楼层|距离|电量|压力|心率|体电|日期|星期|气温|日活动|步数%|总热量|周活动|续航|通知数|闹钟数</string>
+</strings>

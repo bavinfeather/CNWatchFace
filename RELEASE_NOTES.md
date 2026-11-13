@@ -1,5 +1,17 @@
 # 更新记录 / What's New
 
+## 1.5.10
+
+**中文：** AMOLED 常亮模式扩充了三个位置的自定义选项，可选步数、心率、身体电量、气温等数据。每个字段都有名称，仍可选择简洁模式。
+
+**English:** AMOLED always-on mode expands the choices for three customizable slots, with data such as steps, heart rate, Body Battery, and temperature. Each field has a label, and the simple layout is still available.
+
+## 1.5.9
+
+**中文：** 仅高内存机型支持和风天气与和风中文位置查询，需自行填写 API Host 和 Key。低内存机型不支持和风天气，继续使用 Garmin 天气，通过手机调整设置。AMOLED 图表区支持上下两排独立自定义数据，字段名称与单位跟随表盘语言。精简手表菜单并修复超长文字越界。
+
+**English:** QWeather weather and Chinese location lookup are supported only on high-memory watch models and require your own API Host and Key. Low-memory models do not support QWeather; they retain Garmin weather and use phone settings. AMOLED watches can replace the chart with two independently selectable data rows, with labels and units matching the watch face language. Simplified on-watch menus and fixed overflowing text.
+
 ## 1.5.8
 
 **中文：** 修复运动距离字段可能导致表盘崩溃的问题，改善旧机型身体电量、恢复时间等字段的兼容性，并提升天气数据异常时的启动稳定性。为节约内存，月相显示已移除。

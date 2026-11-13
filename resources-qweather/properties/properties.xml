@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <property id="QWeatherRegion" type="number">1</property>
+    <property id="WeatherSource" type="number">0</property>
+    <property id="QWeatherHost" type="string"></property>
+    <property id="QWeatherKey" type="string"></property>
+    <property id="QWeatherAttribution" type="string">https://www.qweather.com</property>
+</properties>

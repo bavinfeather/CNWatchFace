@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
+    <string id="SettingChartCustomData" scope="settings">Chart area custom data</string>
+    <string id="SettingChartDataField" scope="settings">Chart area upper field</string>
+    <string id="SettingChartDataFieldBottom" scope="settings">Chart area lower field</string>
+    <string id="SettingQWeatherRegion" scope="settings">QWeather coordinate region</string>
+    <string id="QWeatherRegionMainland" scope="settings">Mainland China (GPS to GCJ-02)</string>
+    <string id="QWeatherRegionOther" scope="settings">Other regions, including Hong Kong, Macao and Taiwan (WGS-84)</string>
+    <string id="SettingQWeatherHost" scope="settings">QWeather API Host</string>
+    <string id="SettingQWeatherKey" scope="settings">QWeather API Key</string>
+    <string id="SettingQWeatherAttribution" scope="settings">Weather powered by QWeather</string>
+    <string id="SettingWeatherSource" scope="settings">Weather source</string>
+    <string id="WeatherSourceGarmin" scope="settings">Garmin</string>
+    <string id="WeatherSourceQWeather" scope="settings">QWeather</string>
     <string id="AppName">Geometric Mountain Color Watch Face</string>
     <string id="SettingsTitle">Watch face settings</string>
     <string id="DatePattern">$1$/$2$</string>
@@ -59,16 +71,10 @@
     <string id="SettingFieldLeft">Bottom left field</string>
     <string id="SettingFieldCenter">Bottom center field (hidden with 2 fields)</string>
     <string id="SettingFieldRight">Bottom right field</string>
-    <string id="SettingAodLeftField">AOD left field</string>
-    <string id="SettingAodCenterField">AOD center field</string>
-    <string id="SettingAodRightField">AOD right field</string>
     <string id="SettingWeatherLeft">Weather left</string>
     <string id="SettingWeatherRight">Weather right (hidden with 1 field)</string>
     <string id="SettingWeatherFieldCount">Weather field count</string>
     <string id="SettingUpdateFrequency">Data update frequency</string>
-    <string id="SettingLowPowerStyle">AMOLED always-on display</string>
-    <string id="LowPowerSimple">Time and date only</string>
-    <string id="LowPowerFull">Compact watch face</string>
     <string id="EveryMinute">Every minute</string>
     <string id="Every30Seconds">Every 30 seconds</string>
     <string id="Every5Seconds">Every 5 seconds</string>

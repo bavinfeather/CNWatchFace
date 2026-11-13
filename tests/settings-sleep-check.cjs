@@ -2,17 +2,19 @@ const fs = require('node:fs');
 const assert = require('node:assert/strict');
 const read = file => fs.readFileSync(`${__dirname}/../${file}`, 'utf8');
 // Exercise the actual application entry points, not just the view handler.
-for (const folder of ['source', 'source-legacy']) {
+for (const folder of ['source', 'source-legacy', 'source-low-memory']) {
     let notified = 0, updates = 0;
     class View { onSettingsChanged() { notified++; } }
-    const text = read(`${folder}/CNWatchFaceApp.mc`);
+    const text = read(folder === 'source-low-memory' ? 'source/CNWatchFaceAppLowMemory.mc' : `${folder}/CNWatchFaceApp.mc`);
     const header = 'class CNWatchFaceApp extends Application.AppBase {';
     const body = text.slice(text.indexOf(header) + header.length, text.lastIndexOf('}'))
         .replaceAll('private var ', 'var ');
-    const make = new Function('AppBase', 'WatchUi', 'CNWatchFaceView', 'CNWatchFaceLegacyView',
-        `${body}; return {initialize,getInitialView,onSettingsChanged};`);
-    const app = make({initialize(){}}, {requestUpdate(){updates++;}}, View, View);
+    const make = new Function('AppBase', 'WatchUi', 'CNWatchFaceView', 'CNWatchFaceLegacyView', 'QWeatherLocation', 'QWeatherWeather', 'Application',
+        `${body}; return {initialize,getInitialView,onSettingsChanged,getSettingsView:typeof getSettingsView === 'function' ? getSettingsView : ()=>null};`);
+    const app = make({initialize(){}}, {requestUpdate(){updates++;}}, View, View,
+        {reload(){},schedule(){}}, {reload(){},RETRY_KEY:'current',DAILY_RETRY_KEY:'daily'}, {Storage:{deleteValue(){}}});
     app.initialize();
+    if (folder === 'source-low-memory') { assert.equal(app.getSettingsView(), null, 'low-memory products use phone settings'); }
     app.onSettingsChanged(); // notification before view creation must be safe
     assert.equal(updates, 1);
     app.getInitialView();
@@ -57,8 +59,9 @@ assert(settings.includes('Application.getApp().onSettingsChanged();'), 'watch me
 const selector=settings.split('class CNWatchFaceSubMenuDelegate')[1]
     .split('function onSelect(')[1].split('function onBack()')[0];
 const events=[];
-new Function('Application','WatchUi','item','_key','_id','_menu',
-    selector.slice(selector.indexOf('{')+1,selector.lastIndexOf('}')))(
+const selectOption = new Function('Application','WatchUi','item','_key','_id','_menu',
+    selector.slice(selector.indexOf('{')+1,selector.lastIndexOf('}')));
+selectOption(
     {Properties:{setValue:(key,value)=>events.push(['save',key,value])},
      getApp:()=>({onSettingsChanged:()=>events.push(['notify'])})},
     {SLIDE_IMMEDIATE:0,popView:()=>events.push(['back'])},

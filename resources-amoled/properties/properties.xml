@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <property id="ChartCustomData" type="number">0</property>
+    <property id="ChartDataField" type="number">1</property>
+    <property id="ChartDataFieldBottom" type="number">4</property>
+</properties>

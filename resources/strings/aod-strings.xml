@@ -1,0 +1,28 @@
+<strings>
+    <string id="SettingAodLeftField" scope="settings">AOD left field</string>
+    <string id="SettingAodCenterField" scope="settings">AOD center field</string>
+    <string id="SettingAodRightField" scope="settings">AOD right field</string>
+    <string id="SettingLowPowerStyle">AMOLED always-on display</string>
+    <string id="LowPowerSimple">Simple</string>
+    <string id="LowPowerFull">With custom fields</string>
+    <string id="AodTemperatureChoice" scope="settings">Garmin weather temperature</string>
+    <string id="AodHidden" scope="settings">Hide</string>
+    <string id="AodBattery" scope="settings">Battery</string>
+    <string id="AodBatteryDays" scope="settings">Batt. days</string>
+    <string id="AodHeart" scope="settings">Heart rate</string>
+    <string id="AodBodyBattery" scope="settings">Body Batt.</string>
+    <string id="AodStress" scope="settings">Stress</string>
+    <string id="AodSteps" scope="settings">Steps</string>
+    <string id="AodStepGoal" scope="settings">Step goal %</string>
+    <string id="AodDistance" scope="settings">Distance</string>
+    <string id="AodFloors" scope="settings">Floors</string>
+    <string id="AodCalories" scope="settings">Total kcal</string>
+    <string id="AodActiveMinutes" scope="settings">Day min</string>
+    <string id="AodWeeklyMinutes" scope="settings">Week min</string>
+    <string id="AodTemperature" scope="settings">Temp</string>
+    <string id="AodNotifications" scope="settings">Alerts</string>
+    <string id="AodAlarms" scope="settings">Alarms</string>
+    <string id="AodDate" scope="settings">Date</string>
+    <string id="AodWeekday" scope="settings">Weekday</string>
+    <string id="AodLabels">en|Steps|Floors|Dist.|Battery|Stress|Heart|Body B.|Date|Day|Temp|Day min|Goal %|kcal|Wk min|Batt life|Alerts|Alarms</string>
+</strings>

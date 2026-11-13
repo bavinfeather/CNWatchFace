@@ -1,28 +1,31 @@
 # 独立 AMOLED AOD
 
-一代入口：`CNWatchFaceView.drawAmoledAod()`。
-公共绘制文件：`source/SharedAod.mc`。
+CNWatchFace 一至四代共用 `source/SharedAod.mc`（绘制）和 `source/SharedAodFields.mc`（字段和取数）。一代保留主副本，其他三代各带一份相同源码及设置资源，以便独立编译。改动后运行 `python scripts/sync-aod-module.py --write` 同步，去掉 `--write` 可核对。每代的 `aod-properties.xml` 保留各自的默认值。
 
 ## 复用方式
 
-将 `SharedAod.mc` 复制到其他表盘的现代布局源码目录，保留一个长期复用的实例。
-进入 AMOLED 低功耗时调用：
+AMOLED 低功耗 `onUpdate` 入口调用：
 
 ```monkeyc
-renderer.draw(dc, hour * 60 + minute, timeText, dateText, cachedFields);
+var fields = SharedAodFields.collect(simple, defaults, dateText, dayOfWeek, batteryFallback);
+renderer.draw(dc, hour * 60 + minute, timeText, dateText, fields);
 ```
 
 - `timeText`：已按该表盘的 12／24 小时设置格式化的 `HH:MM`。
 - `dateText`：已按该表盘语言格式化的日期。
-- `cachedFields`：0～3 个字符串，空字符串表示隐藏。数值从各表盘缓存提供。
+- `defaults`：左、中、右三个字段的默认 ID。`fields` 为 0～3 对 `[数值, 名称]`，隐藏项已经收拢。
 - 普通显示和 MIP 显示仍走各自原来的绘制路径。
 - 保留各项目自己的应用 ID、数据来源和设置编号，不直接复制一代整个 View。
 
-模块不读取应用设置、语言资源、传感器、天气或联网数据。它只负责字体、排版、山形绘制、颜色强度和每分钟的位置偏移。因此其他项目可以复制这一份文件，仅适配上面的入口。
+绘制模块只接收格式化文本。字段模块每分钟按所选字段读取系统数据，同一组合的重复回调直接复用。简洁模式跳过字段取数。同一帧里多个活动字段共用一次 `ActivityMonitor.getInfo()`，重复选择同一字段也只取一次。字段更新走 `onUpdate`，没有额外定时器或 `onPartialUpdate` 刷新。
 
-## 一代行为
+心率优先取系统当前值，其次取最近一条 60 秒内的记录。身体电量和压力使用设备提供的系统复杂功能值。气温读取 Garmin 的天气缓存，超过两小时或缺少观测时间时显示 `--`，和风的后台查询不参与息屏取数。距离和气温使用系统单位。
 
-保留原有“简洁／紧凑”和左／中／右数据位设置；简洁模式显示时间、日期和山形，紧凑模式额外显示选中的缓存数据。隐藏的数据位自动收拢。
+参考 [Segment34 mkII 的取数与常亮绘制](https://github.com/ludw/Segment34mkII/blob/main/source/Segment34View.mc)、[Garmin 表盘低功耗指南](https://developer.garmin.com/connect-iq/articles/user-experience-guidelines/Watch_Faces.html)及 [Garmin 天气缓存接口](https://developer.garmin.com/connect-iq/api-docs/Toybox/Weather.html)。
+
+## 常亮显示
+
+手机设置仅在 AMOLED 机型显示常亮选项。简洁模式显示时间、日期和山形。选择“显示自定义字段”后可配置左、中、右位置，字段名称显示在数值上方，隐藏位置自动收拢。
 
 时间放在上方，日期和可选数据在中间，下方保留两条山脊和一块暗铜色三角切面。山脊沿用一代正常表盘远山／中山的折线比例，压缩到屏幕下方的安全范围。本模块没有增加数据读取。山脊坐标只创建一次，描边后恢复默认笔宽。
 

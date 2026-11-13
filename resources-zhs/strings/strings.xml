@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
+    <string id="SettingChartCustomData" scope="settings">图表区自定义数据</string>
+    <string id="SettingChartDataField" scope="settings">图表区上排数据</string>
+    <string id="SettingChartDataFieldBottom" scope="settings">图表区下排数据</string>
+    <string id="SettingQWeatherRegion" scope="settings">和风坐标区域</string>
+    <string id="QWeatherRegionMainland" scope="settings">中国大陆（GPS 转 GCJ-02）</string>
+    <string id="QWeatherRegionOther" scope="settings">其他地区，含港澳台（WGS-84）</string>
+    <string id="SettingQWeatherHost" scope="settings">和风 API Host</string>
+    <string id="SettingQWeatherKey" scope="settings">和风 API Key</string>
+    <string id="SettingQWeatherAttribution" scope="settings">天气服务由和风天气驱动</string>
+    <string id="SettingWeatherSource" scope="settings">天气来源</string>
+    <string id="WeatherSourceGarmin" scope="settings">Garmin 天气</string>
+    <string id="WeatherSourceQWeather" scope="settings">和风天气</string>
     <string id="AppName">几何山景·中文彩色表盘</string>
     <string id="SettingsTitle">表盘设置</string>
     <string id="DatePattern">$1$月$2$日</string>
@@ -59,16 +71,10 @@
     <string id="SettingFieldLeft">底部左侧字段</string>
     <string id="SettingFieldCenter">底部中间字段（2个字段时不显示）</string>
     <string id="SettingFieldRight">底部右侧字段</string>
-    <string id="SettingAodLeftField">常亮模式左侧字段</string>
-    <string id="SettingAodCenterField">常亮模式中间字段</string>
-    <string id="SettingAodRightField">常亮模式右侧字段</string>
     <string id="SettingWeatherLeft">天气左侧</string>
     <string id="SettingWeatherRight">天气右侧（1个字段时不显示）</string>
     <string id="SettingWeatherFieldCount">天气字段数量</string>
     <string id="SettingUpdateFrequency">数据更新频率</string>
-    <string id="SettingLowPowerStyle">AMOLED 常亮显示</string>
-    <string id="LowPowerSimple">仅显示时间和日期</string>
-    <string id="LowPowerFull">精简表盘</string>
     <string id="EveryMinute">每分钟</string>
     <string id="Every30Seconds">每30秒</string>
     <string id="Every5Seconds">每5秒</string>

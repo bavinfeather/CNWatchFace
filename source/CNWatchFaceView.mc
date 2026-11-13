@@ -181,7 +181,7 @@ class CNWatchFaceView extends WatchUi.WatchFace {
     private var _lunarDateChinese = null;
     private var _lunarDateEnglish = null;
     private var _sunDiagnostic = -1;
-    // AOD cache: filled during the regular onUpdate path.
+    // Normal display data cache.
     private var _cachedHeartRate = null;
     private var _cachedBatteryPercent = 0;
     private var _batteryKnown = false;
@@ -455,6 +455,8 @@ class CNWatchFaceView extends WatchUi.WatchFace {
     // When the user changes settings, drop the cached vector font so the
     // next onUpdate re-loads it with the current size, and force a redraw.
     function onSettingsChanged() as Void {
+        CNWeatherProvider.source = -1;
+        CNChartData.clear();
         _topLabelFont = null;
         _topLabelFontChecked = false;
         _iconCache = {};
@@ -767,43 +769,14 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         return _timeVectorFont;
     }
 
-    // AOD must not fetch live data. Keep its optional field restricted to
-    // data already cached in the active path or available from the clock.
-    private function aodFieldValue(field as Lang.Number, date) as Lang.String {
-        if (field == FIELD_HIDDEN) { return ""; }
-        if (field == FIELD_BATTERY) { return _batteryKnown ? _cachedBatteryPercent.format("%d") + "%" : "--"; }
-        if (field == FIELD_HEART) {
-            return _cachedHeartRate == null ? "--" : _cachedHeartRate.toNumber().format("%d");
-        }
-        if (field == FIELD_DATE) { return Lang.format(text(Rez.Strings.DatePattern), [date.month, date.day]); }
-        if (field == FIELD_WEEKDAY) { return weekdayText(date.day_of_week); }
-        return "--";
-    }
-
-    // Shared renderer receives only formatted time/date and cached values.
-    // Keep the existing simple/compact setting and all three field choices.
     private function drawAmoledAod(dc as Graphics.Dc, clock as System.ClockTime, date, displayHour as Lang.Number, simple as Lang.Boolean) as Void {
         if (_aodRenderer == null) { _aodRenderer = new SharedAod(); }
-        var fields = [];
-        if (!simple) {
-            // Refresh only the visible AOD battery; keep the last valid value.
-            if (numberProperty("AodLeftField", FIELD_HEART) == FIELD_BATTERY ||
-                numberProperty("AodCenterField", FIELD_BATTERY) == FIELD_BATTERY ||
-                numberProperty("AodRightField", FIELD_BATTERY) == FIELD_BATTERY) {
-                try {
-                    var aodBattery = System.getSystemStats().battery;
-                    if (aodBattery != null) { _cachedBatteryPercent = aodBattery.toNumber(); _batteryKnown = true; }
-                } catch (e) {}
-            }
-            fields = [
-                aodFieldValue(numberProperty("AodLeftField", FIELD_HEART), date),
-                aodFieldValue(numberProperty("AodCenterField", FIELD_BATTERY), date),
-                aodFieldValue(numberProperty("AodRightField", FIELD_BATTERY), date)
-            ];
-        }
+        var dateText = Lang.format(text(Rez.Strings.DatePattern), [date.month, date.day]);
+        var fields = SharedAodFields.collect(simple, [7, 5, 5], dateText, date.day_of_week,
+            _batteryKnown ? _cachedBatteryPercent : null);
         _aodRenderer.draw(dc, clock.hour * 60 + clock.min,
             displayHour.format("%02d") + ":" + clock.min.format("%02d"),
-            Lang.format(text(Rez.Strings.DatePattern), [date.month, date.day]), fields);
+            dateText, fields);
     }
     // The scene deliberately occupies the whole upper half.  It is a backdrop,
     // not a rectangular panel behind only the time.
@@ -1594,6 +1567,9 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         if (sunrise == null || sunset == null) { return null; }
         if (now.value() < sunrise.value()) { return sunrise; }
         if (now.value() < sunset.value()) { return sunset; }
+        if (conditions != null && conditions has :qNextSunrise && conditions.qNextSunrise != null && conditions.qNextSunrise.value() > now.value()) {
+            return conditions.qNextSunrise;
+        }
         try {
             if (conditions == null || conditions.observationLocationPosition == null || !(Weather has :getSunrise)) { return null; }
             return Weather.getSunrise(conditions.observationLocationPosition, Time.today().add(new Time.Duration(86401)));
@@ -1934,6 +1910,10 @@ class CNWatchFaceView extends WatchUi.WatchFace {
     }
 
     private function sunMoment(conditions, now as Time.Moment, rising as Lang.Boolean) {
+        if (conditions instanceof CNWatchFaceStoredWeather) {
+            var supplied = rising ? conditions.qSunrise : conditions.qSunset;
+            if (supplied != null) { return supplied; }
+        }
         var date = Gregorian.info(now, Time.FORMAT_SHORT);
         var day = (date.year * 13 + date.month) * 32 + date.day;
         var locationChanged = false;
@@ -2038,9 +2018,14 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         if (field == FIELD_RESPIRATION_RATE) {
             return activity == null || !(activity has :respirationRate) || activity.respirationRate == null ? "--" : activity.respirationRate.format("%.0f");
         }
-        if (field == FIELD_WEATHER_CONDITION) { return conditions == null ? "--" : weatherText(conditions.condition); }
+        if (field == FIELD_WEATHER_CONDITION) {
+            if (conditions != null && conditions has :conditionText && conditions.conditionText != null) { return conditions.conditionText; }
+            return conditions == null ? "--" : weatherText(conditions.condition);
+        }
         if (field == FIELD_NEXT_SUN_EVENT) { return formatMoment(nextSunEvent(conditions, now)); }
-        if (field == FIELD_LOCATION_NAME) { return _cachedLocationName; }
+        if (field == FIELD_LOCATION_NAME) {
+            return CNWeatherProvider.locationName(_cachedLocationName);
+        }
         if (field == FIELD_UV_INDEX) {
             return conditions == null || !(conditions has :uvIndex) || conditions.uvIndex == null ? "--" : conditions.uvIndex.format("%.0f");
         }
@@ -2325,6 +2310,7 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         }
     }
 
+
     private function weatherValue(kind as Lang.Number, conditions) as Lang.String {
         if (kind == WX_HIDDEN) { return ""; }
         if (kind == WX_TEMP) {
@@ -2341,6 +2327,7 @@ class CNWatchFaceView extends WatchUi.WatchFace {
             return formatTemperatureRange(conditions.highTemperature, conditions.lowTemperature);
         }
         if (kind == WX_CONDITION) {
+            if (conditions has :conditionText && conditions.conditionText != null) { return conditions.conditionText; }
             return weatherText(conditions.condition);
         }
         if (kind == WX_PRECIP) {
@@ -2749,9 +2736,15 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         return value.substring(0, 1);
     }
 
-    private function drawCompactField(dc as Graphics.Dc, field as Lang.Number, cx as Lang.Number, cy as Lang.Number, color as Lang.Number, textColor as Lang.Number, battery as Lang.Number, context as Lang.Array) as Void {
+    private function drawCompactField(dc as Graphics.Dc, field as Lang.Number, cx as Lang.Number, cy as Lang.Number, color as Lang.Number, textColor as Lang.Number, battery as Lang.Number, context as Lang.Array, chartRow as Lang.Number) as Void {
         if (field == FIELD_HIDDEN) { return; }
         var value = fieldValue(field, battery, context[0], context[1], context[2], context[3], context[4]);
+        if (chartRow >= 0) {
+            var marker = value.find(TEMPERATURE_DEGREE_MARKER);
+            if (marker != null) { value = value.substring(0, marker) + "°" + value.substring(marker + 1, value.length()); }
+            CNChartData.draw(dc, field, value, cy, textColor, smallFieldFont(dc), chartRow);
+            return;
+        }
         if (field == FIELD_LOCATION_NAME) { value = fitLocationValue(dc, value); }
         var iconSpace = scalePx(14);
         var textWidth = temperatureTextWidth(dc, value);
@@ -2866,8 +2859,7 @@ class CNWatchFaceView extends WatchUi.WatchFace {
             else if (displayHour > 12) { displayHour -= 12; }
         }
 
-        // AOD only consumes values captured while the watch face was active.
-        // Do this before any sensor, weather, or profile request.
+        // Keep AOD ahead of the normal sensor, weather and profile refreshes.
         var amoledLowPower = _lowPower;
         if (isAmoledLayout() && (System has :getDisplayMode)) {
             amoledLowPower = amoledLowPower || System.getDisplayMode() == System.DISPLAY_MODE_LOW_POWER;
@@ -2885,6 +2877,7 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         var dataTick = (nowSeconds / dataPeriod).toNumber();
         var profileTick = (nowSeconds / PROFILE_CACHE_SECONDS).toNumber();
         var showSeconds = numberProperty("ShowSecondsActive", 0) == 1 && !_lowPower;
+        var chartCustom = isAmoledLayout() && numberProperty("ChartCustomData", 0) == 1;
         var activityDay = (date.year * 13 + date.month) * 32 + date.day;
         var deferWakeRefresh = _wakeFramePending && _dataMinute >= 0 && _activityCacheDay == activityDay;
         _wakeFramePending = false;
@@ -2955,15 +2948,27 @@ class CNWatchFaceView extends WatchUi.WatchFace {
             refreshFieldData(fieldProperty("FieldLeft", FIELD_STEPS), currentActivity, date);
             refreshFieldData(fieldProperty("FieldCenter", FIELD_BATTERY), currentActivity, date);
             refreshFieldData(fieldProperty("FieldRight", FIELD_HEART), currentActivity, date);
-            refreshTrendData(numberProperty("TrendField", TREND_HEART), currentActivity);
+            if (chartCustom) {
+                refreshFieldData(fieldProperty("ChartDataField", FIELD_STEPS), currentActivity, date);
+                refreshFieldData(fieldProperty("ChartDataFieldBottom", FIELD_DISTANCE), currentActivity, date);
+                trendCurrentValue(numberProperty("TrendField", TREND_HEART), currentActivity);
+            } else {
+                refreshTrendData(numberProperty("TrendField", TREND_HEART), currentActivity);
+            }
             refreshRingData(numberProperty("RingField", RING_BATTERY), currentActivity);
-            // Normal fields/trend already request HR when needed. Keep a
-            // reading for an independently selected AOD heart-rate field.
-            if (numberProperty("AodLeftField", FIELD_HIDDEN) == FIELD_HEART ||
-                numberProperty("AodCenterField", FIELD_HIDDEN) == FIELD_HEART ||
-                numberProperty("AodRightField", FIELD_HIDDEN) == FIELD_HEART) { currentHeartRate(); }
         }
-        if (!_weatherStorageLoaded) {
+        var weatherSource = CNWeatherProvider.selectedSource();
+        if (CNWeatherProvider.source != weatherSource) {
+            CNWeatherProvider.source = weatherSource;
+            _weatherStorageLoaded = false;
+            _cachedConditions = null;
+            _cachedWeatherTemperature = null;
+            _cachedLocationName = "--";
+            _weatherNextAttemptSeconds = 0;
+            _sunWeatherTick = -1;
+            _sunCacheTick = -1;
+        }
+        if (weatherSource == 0 && !_weatherStorageLoaded) {
             _weatherStorageLoaded = true;
             var storedWeather = readWeatherCache();
             if (hasUsableWeather(storedWeather)) {
@@ -2973,7 +2978,7 @@ class CNWatchFaceView extends WatchUi.WatchFace {
                 updateLocationNameCache(storedWeather);
             }
         }
-        if (_cachedConditions != null && !hasUsableWeather(_cachedConditions)) {
+        if (weatherSource == 0 && _cachedConditions != null && !hasUsableWeather(_cachedConditions)) {
             _cachedConditions = null;
             _cachedWeatherTemperature = null;
             _cachedLocationName = "--";
@@ -2983,19 +2988,23 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         if (!deferWakeRefresh && nowSeconds >= _weatherNextAttemptSeconds) {
             _weatherNextAttemptSeconds = nowSeconds + WEATHER_RETRY_SECONDS;
             var latestConditions = null;
-            try {
-                latestConditions = Weather.getCurrentConditions();
-            } catch (e) {
-                // Keep the last known conditions and retry soon.
+            if (weatherSource == 1) {
+                latestConditions = CNWeatherProvider.conditions(nowSeconds);
+            } else {
+                try {
+                    latestConditions = Weather.getCurrentConditions();
+                } catch (e) {
+                    // Keep the last known conditions and retry soon.
+                }
             }
-            if (hasUsableWeather(latestConditions)) {
-                latestConditions = mergeWeather(latestConditions);
+            if (latestConditions != null && (weatherSource == 1 || hasUsableWeather(latestConditions))) {
+                if (weatherSource == 0) { latestConditions = mergeWeather(latestConditions); }
                 updateLocationNameCache(latestConditions);
                 _cachedConditions = latestConditions;
                 _weatherCacheTick = nowSeconds;
                 cacheWeatherTemperature(latestConditions);
-                storeWeatherCache(latestConditions);
-                _weatherNextAttemptSeconds = nowSeconds + WEATHER_CACHE_SECONDS;
+                if (weatherSource == 0) { storeWeatherCache(latestConditions); }
+                _weatherNextAttemptSeconds = nowSeconds + (weatherSource == 1 ? WEATHER_RETRY_SECONDS : WEATHER_CACHE_SECONDS);
             }
         }
         var batteryPercent = _cachedBatteryPercent;
@@ -3055,8 +3064,8 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         // Top custom fields
         var topY = _profileTopFieldY;
         var fieldContext = [activity, clock, date, conditions, now];
-        drawCompactField(dc, fieldProperty("FieldTopLeft", FIELD_SUNRISE), x(0.30), topY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
-        drawCompactField(dc, fieldProperty("FieldTopRight", FIELD_SUNSET), x(0.70), topY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
+        drawCompactField(dc, fieldProperty("FieldTopLeft", FIELD_SUNRISE), x(0.30), topY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
+        drawCompactField(dc, fieldProperty("FieldTopRight", FIELD_SUNSET), x(0.70), topY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
 
         // Time, seconds and AM/PM form one measured component. Reserve the
         // configured side slot even while seconds are suppressed in sleep, so
@@ -3198,8 +3207,9 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         // side. Its top edge is exactly the lower edge of the mountain band.
         var trendMode = numberProperty("TrendField", TREND_HEART);
         var trendStyle = numberProperty("TrendStyle", TREND_STYLE_BARS);
-        var values = trendValues(trendMode);
+        var values = chartCustom ? [] : trendValues(trendMode);
         var current = trendCurrentValue(trendMode, activity);
+        if (chartCustom && current == null) { values = trendValues(trendMode); }
         if (current == null && values.size() > 0) {
             current = values[values.size() - 1];
         }
@@ -3227,7 +3237,12 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         // Keep the chart baseline at a fixed pixel coordinate above the bottom fields.
         var sepY = y(0.74) + amoledJitterY;
         var chartH = sepY - chartTop;
-        if (chartH > 0) {
+        if (chartCustom && chartH > 0) {
+            drawCompactField(dc, fieldProperty("ChartDataField", FIELD_STEPS), 0, midY,
+                fieldTextColor, fieldValueColor, batteryPercent, fieldContext, 0);
+            drawCompactField(dc, fieldProperty("ChartDataFieldBottom", FIELD_DISTANCE), 0, midY + scalePx(22),
+                fieldTextColor, fieldValueColor, batteryPercent, fieldContext, 1);
+        } else if (chartH > 0) {
             drawTrend(dc, trendStyle, values, fieldTextColor, chartLeft, chartTop, chartW, chartH, trendMode);
         }
 
@@ -3255,12 +3270,12 @@ class CNWatchFaceView extends WatchUi.WatchFace {
         if (bottomLayout == 1) { outerX = 0.28; }
         else if (bottomLayout == 2) { outerX = 0.22; }
         if (bottomCount == 2) {
-            drawCompactField(dc, fields[0], x(outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
-            drawCompactField(dc, fields[2], x(1.0 - outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
+            drawCompactField(dc, fields[0], x(outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
+            drawCompactField(dc, fields[2], x(1.0 - outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
         } else {
-            drawCompactField(dc, fields[0], x(outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
-            drawCompactField(dc, fields[1], _cx, fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
-            drawCompactField(dc, fields[2], x(1.0 - outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext);
+            drawCompactField(dc, fields[0], x(outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
+            drawCompactField(dc, fields[1], _cx, fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
+            drawCompactField(dc, fields[2], x(1.0 - outerX), fieldY, fieldTextColor, fieldValueColor, batteryPercent, fieldContext, -1);
         }
 
         // Weather: two customizable slots in one compact row
@@ -3294,6 +3309,10 @@ class CNWatchFaceView extends WatchUi.WatchFace {
 }
 
 class CNWatchFaceStoredWeather {
+    public var conditionText as Lang.String or Null;
+    public var qSunrise as Time.Moment or Null;
+    public var qSunset as Time.Moment or Null;
+    public var qNextSunrise as Time.Moment or Null;
     public var observationTime as Time.Moment or Null;
     public var observationLocationPosition as Position.Location or Null;
     public var observationLocationName as Lang.String or Null;

@@ -39,6 +39,24 @@ for (const device of products) {
         assert(fs.existsSync(path.join(dir, `CNWatchFace-${version}.prg`)), `${device}: missing PRG`);
         const settings = JSON.parse(fs.readFileSync(path.join(dir, `${part.number}-settings.json`), 'utf8'));
         const rows = settings.settings;
+        const lowMemory = metadata.appTypes.find(a=>a.type==='watchFace').memoryLimit < 131072;
+        const chart = rows.filter(s=>s.key.startsWith('Chart'));
+        const weather = rows.filter(s=>s.key.startsWith('QWeather') || s.key==='WeatherSource');
+        assert(chart.length === (!legacy && metadata.displayType==='amoled' ? 3 : 0), `${device}: chart settings isolation`);
+        assert(weather.length === (!legacy && !lowMemory ? 5 : 0), `${device}: QWeather settings isolation`);
+        if (weather.length > 0) {
+            assert(weather.find(s=>s.key==='QWeatherHost').defaultValue === '', `${device}: API Host must be user supplied`);
+            assert(weather.find(s=>s.key==='QWeatherKey').defaultValue === '', `${device}: API Key must be user supplied`);
+            assert(weather.find(s=>s.key==='WeatherSource').defaultValue === 0, `${device}: default Garmin weather`);
+        }
+        if (chart.length > 0) {
+            assert(chart.find(s=>s.key==='ChartCustomData').defaultValue === 0, `${device}: default chart mode`);
+            for (const key of ['ChartDataField','ChartDataFieldBottom']) {
+                const choices = rows.find(s=>s.key===key).configOptions.map(o=>o.value);
+                assert(new Set(choices).size === choices.length, `${device}: duplicate chart choices in ${key}`);
+                assert(choices.includes(1) && choices.includes(4) && choices.includes(53), `${device}: chart field choices`);
+            }
+        }
         assert(new Set(rows.map(s=>s.key)).size === rows.length, `${device}: duplicate settings`);
         const font = rows.find(s=>s.key === 'TopLabelFont');
         const weight = rows.find(s=>s.key === 'TopLabelBold');

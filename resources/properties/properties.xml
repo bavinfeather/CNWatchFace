@@ -32,13 +32,8 @@
     <property id="FieldLeft" type="number">2</property>
     <property id="FieldCenter" type="number">1</property>
     <property id="FieldRight" type="number">3</property>
-    <!-- AMOLED AOD uses cached data only; these control its bottom fields. -->
-    <property id="AodLeftField" type="number">7</property>
-    <property id="AodCenterField" type="number">5</property>
-    <property id="AodRightField" type="number">5</property>
     <property id="WeatherLeft" type="number">1</property>
     <property id="WeatherRight" type="number">3</property>
     <property id="WeatherFieldCount" type="number">2</property>
     <property id="UpdateFrequency" type="number">60</property>
-    <property id="LowPowerStyle" type="number">1</property>
 </properties>

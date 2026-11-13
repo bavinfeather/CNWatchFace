@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <setting propertyKey="@Properties.QWeatherRegion" title="@Strings.SettingQWeatherRegion">
+        <settingConfig type="list">
+            <listEntry value="1">@Strings.QWeatherRegionMainland</listEntry>
+            <listEntry value="0">@Strings.QWeatherRegionOther</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.WeatherSource" title="@Strings.SettingWeatherSource">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.WeatherSourceGarmin</listEntry>
+            <listEntry value="1">@Strings.WeatherSourceQWeather</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.QWeatherHost" title="@Strings.SettingQWeatherHost">
+        <settingConfig type="alphaNumeric" maxLength="110"/>
+    </setting>
+    <setting propertyKey="@Properties.QWeatherKey" title="@Strings.SettingQWeatherKey">
+        <settingConfig type="password" maxLength="128"/>
+    </setting>
+    <setting propertyKey="@Properties.QWeatherAttribution" title="@Strings.SettingQWeatherAttribution" helpUrl="https://www.qweather.com">
+        <settingConfig type="url" readonly="true"/>
+    </setting>
+</settings>

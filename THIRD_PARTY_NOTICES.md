@@ -1,5 +1,13 @@
 # Third-party notices
 
+## eviltransform coordinate conversion
+
+`source/QWeatherCoordinates.mc` ports the WGS-84-to-GCJ-02 calculation from
+[googollee/eviltransform](https://github.com/googollee/eviltransform/blob/master/javascript/transform.js).
+The upstream BSD-2-Clause license and copyright notice are retained in
+[`licenses/BSD-2-Clause-eviltransform.txt`](licenses/BSD-2-Clause-eviltransform.txt).
+Only modern-layout builds include this module.
+
 ## Material Design Icons
 
 `resources/drawables/body_battery_handsup.svg` and every

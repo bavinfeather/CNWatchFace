@@ -1,0 +1,74 @@
+<settings>
+    <setting propertyKey="@Properties.LowPowerStyle" title="@Strings.SettingLowPowerStyle">
+        <settingConfig type="list">
+            <listEntry value="1">@Strings.LowPowerSimple</listEntry>
+            <listEntry value="0">@Strings.LowPowerFull</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.AodLeftField" title="@Strings.SettingAodLeftField">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.AodHidden</listEntry>
+            <listEntry value="5">@Strings.AodBattery</listEntry>
+            <listEntry value="29">@Strings.AodBatteryDays</listEntry>
+            <listEntry value="7">@Strings.AodHeart</listEntry>
+            <listEntry value="8">@Strings.AodBodyBattery</listEntry>
+            <listEntry value="6">@Strings.AodStress</listEntry>
+            <listEntry value="1">@Strings.AodSteps</listEntry>
+            <listEntry value="15">@Strings.AodStepGoal</listEntry>
+            <listEntry value="4">@Strings.AodDistance</listEntry>
+            <listEntry value="2">@Strings.AodFloors</listEntry>
+            <listEntry value="23">@Strings.AodCalories</listEntry>
+            <listEntry value="14">@Strings.AodActiveMinutes</listEntry>
+            <listEntry value="26">@Strings.AodWeeklyMinutes</listEntry>
+            <listEntry value="12">@Strings.AodTemperatureChoice</listEntry>
+            <listEntry value="35">@Strings.AodNotifications</listEntry>
+            <listEntry value="48">@Strings.AodAlarms</listEntry>
+            <listEntry value="10">@Strings.AodDate</listEntry>
+            <listEntry value="11">@Strings.AodWeekday</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.AodCenterField" title="@Strings.SettingAodCenterField">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.AodHidden</listEntry>
+            <listEntry value="5">@Strings.AodBattery</listEntry>
+            <listEntry value="29">@Strings.AodBatteryDays</listEntry>
+            <listEntry value="7">@Strings.AodHeart</listEntry>
+            <listEntry value="8">@Strings.AodBodyBattery</listEntry>
+            <listEntry value="6">@Strings.AodStress</listEntry>
+            <listEntry value="1">@Strings.AodSteps</listEntry>
+            <listEntry value="15">@Strings.AodStepGoal</listEntry>
+            <listEntry value="4">@Strings.AodDistance</listEntry>
+            <listEntry value="2">@Strings.AodFloors</listEntry>
+            <listEntry value="23">@Strings.AodCalories</listEntry>
+            <listEntry value="14">@Strings.AodActiveMinutes</listEntry>
+            <listEntry value="26">@Strings.AodWeeklyMinutes</listEntry>
+            <listEntry value="12">@Strings.AodTemperatureChoice</listEntry>
+            <listEntry value="35">@Strings.AodNotifications</listEntry>
+            <listEntry value="48">@Strings.AodAlarms</listEntry>
+            <listEntry value="10">@Strings.AodDate</listEntry>
+            <listEntry value="11">@Strings.AodWeekday</listEntry>
+        </settingConfig>
+    </setting>
+    <setting propertyKey="@Properties.AodRightField" title="@Strings.SettingAodRightField">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.AodHidden</listEntry>
+            <listEntry value="5">@Strings.AodBattery</listEntry>
+            <listEntry value="29">@Strings.AodBatteryDays</listEntry>
+            <listEntry value="7">@Strings.AodHeart</listEntry>
+            <listEntry value="8">@Strings.AodBodyBattery</listEntry>
+            <listEntry value="6">@Strings.AodStress</listEntry>
+            <listEntry value="1">@Strings.AodSteps</listEntry>
+            <listEntry value="15">@Strings.AodStepGoal</listEntry>
+            <listEntry value="4">@Strings.AodDistance</listEntry>
+            <listEntry value="2">@Strings.AodFloors</listEntry>
+            <listEntry value="23">@Strings.AodCalories</listEntry>
+            <listEntry value="14">@Strings.AodActiveMinutes</listEntry>
+            <listEntry value="26">@Strings.AodWeeklyMinutes</listEntry>
+            <listEntry value="12">@Strings.AodTemperatureChoice</listEntry>
+            <listEntry value="35">@Strings.AodNotifications</listEntry>
+            <listEntry value="48">@Strings.AodAlarms</listEntry>
+            <listEntry value="10">@Strings.AodDate</listEntry>
+            <listEntry value="11">@Strings.AodWeekday</listEntry>
+        </settingConfig>
+    </setting>
+</settings>
